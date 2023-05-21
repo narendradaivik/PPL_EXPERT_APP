@@ -26,6 +26,7 @@ const Home = ({navigation  }) => {
       .then(token => {
         console.log('Device Token:', token);
         setToken(token);
+        
       })
       .catch(error => {
         console.error('Error retrieving device token:', error);
@@ -34,7 +35,7 @@ const Home = ({navigation  }) => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage){
-        console.log(remoteMessage,'remoteMessage')
+        await AsyncStorage.setItem('dataMessage', JSON.stringify(remoteMessage));
         navigation.navigate('IncomingCallScreen',);
       }
     });
@@ -66,8 +67,6 @@ const Home = ({navigation  }) => {
         setIsTokenSaved(false);
       }
     };
-
-
 
     loadData();
     return unsubscribe;

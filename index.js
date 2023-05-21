@@ -8,16 +8,22 @@ import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { navigate } from './services/NavigationService';
 
 
 // Configure PushNotification
 PushNotification.configure({
   onNotification: function (notification) {
     console.log('Notification received:', notification);
+    navigate('IncomingCallScreen', {});
 
     // Handle the received notification
     // You can navigate to a specific screen or perform any other action here
   },
+  ongoing: true,
+  importance: 'high',
+  priority: 'max',
+  autoCancel:false
 });
 
 // Handle the initial data message received when the app is in a quit state
