@@ -12,23 +12,25 @@ const VideoCall = ({navigation}) => {
   const [connectionData, setconnectionData] = useState();
 
   const callbacks = {
-    EndCall: () => navigation.navigate('Home'),
+    EndCall: () => {
+      setVideoCall(false);
+      navigation.navigate('Home')
+    },
   };
-
+  const handleBackButton = () => {
+    return true;
+  };
   useEffect(() => {
-    const handleBackButton = () => {
-      return true;
-    };
-
     // Disable the back button
     BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
+    //get channel id from storage saved when recived notification
     const getChannelId = async () => {
       const data = await AsyncStorage.getItem('dataMessage');
-
+      const channelId = JSON.parse(data)?.data
       setconnectionData({
         appId: 'd27b9a93945b436dab11d9987110c87c',
-        channel: data.callChannelName,
+        channel: channelId?.callChannelName,
       });
       setVideoCall(true)
     };
@@ -70,7 +72,7 @@ const VideoCall = ({navigation}) => {
     }
   };
   
-  return videoCall && connectionData ? (
+  return videoCall  ? (
     <AgoraUIKit connectionData={connectionData} rtcCallbacks={callbacks} />
   ) : (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

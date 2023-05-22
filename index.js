@@ -30,7 +30,6 @@ PushNotification.configure({
 PushNotification.popInitialNotification(async (notification) => {
   if (notification && notification.data) {
     const data = notification.data;
-    await handleDataMessage(data);
   }
 });
 // Register background handler
