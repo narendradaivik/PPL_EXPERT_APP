@@ -5,7 +5,7 @@ var Sound = require('react-native-sound');
 const IncomingCallScreen = ({navigation}) => {
   
   const [callStatus, setCallStatus] = useState('Incoming');
-/* 
+
     // Enable playback in silence mode
 Sound.setCategory('Playback');
 
@@ -27,7 +27,7 @@ var whoosh = new Sound('call.mp3', Sound.MAIN_BUNDLE, (error) => {
       console.log('playback failed due to audio decoding errors');
     }
   });
-}); */
+});
 
 
   const acceptCall = () => {

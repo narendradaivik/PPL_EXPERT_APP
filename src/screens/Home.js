@@ -11,7 +11,6 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Home = ({navigation  }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState();
@@ -93,7 +92,7 @@ const Home = ({navigation  }) => {
         console.error('Error submitting form', error);
       });
   };
-
+ 
   return (
     <View style={styles.container}>
       {!isTokenSaved ? (
@@ -117,8 +116,8 @@ const Home = ({navigation  }) => {
         </View>
       ) : (
         <View>
-          <Text>No metting for Know </Text>
-          <Text>Wait client to connect you </Text>
+          <Text>No metting for now </Text>
+          <Text>Wait Customer to connect you </Text>
         </View>
       )}
     </View>
