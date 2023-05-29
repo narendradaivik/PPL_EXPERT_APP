@@ -8,8 +8,7 @@ import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { navigate } from './services/NavigationService';
-
+import {navigate} from './src/services/NavigationService';
 
 // Configure PushNotification
 PushNotification.configure({
@@ -23,11 +22,11 @@ PushNotification.configure({
   ongoing: true,
   importance: 'high',
   priority: 'max',
-  autoCancel:false
+  autoCancel: false,
 });
 
 // Handle the initial data message received when the app is in a quit state
-PushNotification.popInitialNotification(async (notification) => {
+PushNotification.popInitialNotification(async notification => {
   if (notification && notification.data) {
     const data = notification.data;
   }
@@ -37,15 +36,15 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
   await AsyncStorage.setItem('dataMessage', JSON.stringify(remoteMessage));
 
-   // Display the sticky notification
-   PushNotification.localNotification({
-     channelId: 'PPL_Call',
-     title: 'Call From Gurpreet',
-     message: 'Join the video call for assistance',
-     vibrate: true,
-     playSound: true,
-     importance: 'high',
-     userInfo: remoteMessage,
-   });
+  // Display the sticky notification
+  PushNotification.localNotification({
+    channelId: 'PPL_Call',
+    title: 'Call From Gurpreet',
+    message: 'Join the video call for assistance',
+    vibrate: true,
+    playSound: true,
+    importance: 'high',
+    userInfo: remoteMessage,
+  });
 });
 AppRegistry.registerComponent(appName, () => App);

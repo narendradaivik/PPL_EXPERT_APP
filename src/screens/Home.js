@@ -1,22 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import {
-  SafeAreaView,
   Text,
   View,
   StyleSheet,
   TextInput,
   Button,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Home = ({navigation  }) => {
+const Home = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
 
-  getFCMToken = async () => {
+  const getFCMToken = async () => {
     // Request permission for notifications (optional)
     await messaging().requestPermission();
     // Get the device token
@@ -25,7 +25,6 @@ const Home = ({navigation  }) => {
       .then(token => {
         console.log('Device Token:', token);
         setToken(token);
-        
       })
       .catch(error => {
         console.error('Error retrieving device token:', error);
@@ -33,13 +32,15 @@ const Home = ({navigation  }) => {
   };
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage){
-        await AsyncStorage.setItem('dataMessage', JSON.stringify(remoteMessage));
-        navigation.navigate('IncomingCallScreen',);
+      if (remoteMessage) {
+        await AsyncStorage.setItem(
+          'dataMessage',
+          JSON.stringify(remoteMessage),
+        );
+        navigation.navigate('IncomingCallScreen');
       }
     });
 
-    
     //check token and number already updated and token is same as before
     const loadData = async () => {
       try {
@@ -69,7 +70,6 @@ const Home = ({navigation  }) => {
 
     loadData();
     return unsubscribe;
-
   }, []);
 
   const handleSubmit = () => {
@@ -82,17 +82,24 @@ const Home = ({navigation  }) => {
     axios
       .put('http://164.52.219.123:8084/kisaan/v1/consultant/updatefcmid', data)
       .then(response => {
-        console.log('Form submitted successfully');
-        // Save the token and phone number in local storage
-        AsyncStorage.setItem('token', token);
-        AsyncStorage.setItem('phoneNumber', phoneNumber);
-        setIsTokenSaved(true);
+        if (response.data) {
+          if (response.data.status) {
+            console.log('Form submitted successfully');
+            // Save the token and phone number in local storage
+            AsyncStorage.setItem('token', token);
+            AsyncStorage.setItem('phoneNumber', phoneNumber);
+            setIsTokenSaved(true);
+            console.log('response=======>> ', response.data);
+          } else {
+            Alert.alert(response.data.message);
+          }
+        }
       })
       .catch(error => {
         console.error('Error submitting form', error);
       });
   };
- 
+
   return (
     <View style={styles.container}>
       {!isTokenSaved ? (
