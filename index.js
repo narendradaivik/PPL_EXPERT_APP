@@ -39,7 +39,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   // Display the sticky notification
   PushNotification.localNotification({
     channelId: 'PPL_Call',
-    title: 'Call From Gurpreet',
+    title: 'Call From JaiKishaan Store',
     message: 'Join the video call for assistance',
     vibrate: true,
     playSound: true,

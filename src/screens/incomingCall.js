@@ -41,8 +41,8 @@ var whoosh = new Sound('call.mp3', Sound.MAIN_BUNDLE, (error) => {
   return (
     <View style={styles.container}>
       <View style={styles.callerInfoContainer}>
-        <Text style={styles.callerName}>Gurpreet Singh</Text>
-        <Text style={styles.callerNumber}>xxxxxxxxxxx</Text>
+        <Text style={styles.callerName}>Jai Kishaan Store</Text>
+        <Text style={styles.callerNumber}></Text>
       </View>
       <View style={styles.callStatusContainer}>
         <Text style={styles.callStatus}>Incoming Call</Text>

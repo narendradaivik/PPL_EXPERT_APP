@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -11,7 +11,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [token, setToken] = useState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
@@ -72,6 +72,11 @@ const Home = ({navigation}) => {
     return unsubscribe;
   }, []);
 
+
+  function isNumeric(value) {
+    return /^\d+$/.test(value);
+  }
+
   const handleSubmit = () => {
     const data = {
       mobile: phoneNumber,
@@ -79,25 +84,37 @@ const Home = ({navigation}) => {
     };
 
     // Make the HTTP POST request using axios
-    axios
-      .put('http://164.52.219.123:8084/kisaan/v1/consultant/updatefcmid', data)
-      .then(response => {
-        if (response.data) {
-          if (response.data.status) {
-            console.log('Form submitted successfully');
-            // Save the token and phone number in local storage
-            AsyncStorage.setItem('token', token);
-            AsyncStorage.setItem('phoneNumber', phoneNumber);
-            setIsTokenSaved(true);
-            console.log('response=======>> ', response.data);
-          } else {
-            Alert.alert(response.data.message);
+    if (
+      phoneNumber === '' ||
+      phoneNumber.trim().length === 0 ||
+      isNumeric(phoneNumber) === false ||
+      phoneNumber.length < 10
+    ) {
+      Alert.alert('Please enter valid mobile number');
+    } else {
+      axios
+        .put('http://164.52.219.123:8084/kisaan/v1/consultant/updatefcmid', data)
+        .then(response => {
+          if (response.data) {
+            if (response.data.status) {
+              console.log('Form submitted successfully');
+              // Save the token and phone number in local storage
+              AsyncStorage.setItem('token', token);
+              AsyncStorage.setItem('phoneNumber', phoneNumber);
+              setIsTokenSaved(true);
+              console.log('response=======>> ', response.data);
+            } else {
+              Alert.alert(response.data.message);
+            }
           }
-        }
-      })
-      .catch(error => {
-        console.error('Error submitting form', error);
-      });
+        })
+        .catch(error => {
+          console.error('Error submitting form', error);
+        });
+    }
+
+
+
   };
 
   return (
@@ -108,18 +125,20 @@ const Home = ({navigation}) => {
             <TextInput
               placeholder="Phone Number"
               value={phoneNumber}
+              keyboardType="number-pad"
               onChangeText={text => setPhoneNumber(text)}
               style={styles.input}
+              maxLength={10}
             />
             <TextInput
               placeholder="Token"
               value={token}
               onChangeText={text => setToken(text)}
-              style={{display: 'none'}} // Hide the field
+              style={{ display: 'none' }} // Hide the field
             />
           </KeyboardAvoidingView>
 
-          <Button title="Submit" onPress={handleSubmit} />
+          <Button title="Submit" color={"#54C351"} onPress={handleSubmit}  />
         </View>
       ) : (
         <View>
